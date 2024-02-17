@@ -40,6 +40,7 @@ export const ForHireListing: FC = () => {
       tags: tags,
       postedBy: {
         name: session.user?.name ?? 'Unknown',
+        id: session.user.id ?? '0'
       },
       status: 'pending',
       metadata: {

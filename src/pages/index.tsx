@@ -24,16 +24,16 @@ export default function Home() {
   useEffect(() => {
     const checkAdmin = async () => {
       if (!session || !database) return;
-      if (!session.user?.name) return;
-      const querySnapshot = await getDocs(query(collection(database, "admins"), where("name", "==", session.user?.name)));
+      if (!session.user?.id) return;
+      const querySnapshot = await getDocs(query(collection(database, "admins"), where("id", "==", session.user?.id)));
 
       setIsAdmin(querySnapshot.size === 1);
     }
 
     const checkIsBanned = async () => {
       if (!session || !database) return;
-      if (!session.user?.name) return;
-      const querySnapshot = await getDocs(query(collection(database, "banned"), where("name", "==", session.user?.name)));
+      if (!session.user?.id) return;
+      const querySnapshot = await getDocs(query(collection(database, "banned"), where("id", "==", session.user?.id)));
 
       setIsBanned(querySnapshot.size === 1);
     }

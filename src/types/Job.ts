@@ -8,6 +8,7 @@ export interface JobData {
   tags: JobTagType[];
   postedBy: {
     name: string;
+    id: string;
   };
   status: string;
   metadata?: {
@@ -24,6 +25,7 @@ export interface ForHireData {
   tags: JobTagType[];
   postedBy: {
     name: string;
+    id: string;
   };
   status: string;
   metadata?: {

@@ -54,10 +54,10 @@ const AdminView = () => {
 
   }, [database, isAdmin]);
 
-  const handleDeleteDoc = async (id: string) => {
+  const handleDeleteDoc = async (id: string, which: 'jobs' | 'hire') => {
     if (!database) return;
 
-    await deleteDoc(doc(database, `jobs/${id}`));
+    await deleteDoc(doc(database, `${which}/${id}`));
   }
 
   const handleStatusChange = async (id: string, status: 'approved' | 'rejected', which: 'jobs' | 'hire') => {
@@ -65,7 +65,12 @@ const AdminView = () => {
 
     const docRef = doc(database, `${which}/${id}`);
 
-    await updateDoc(docRef, { status, "metadata.updatedAt": Date.now(), "metadata.updatedBy": session?.user?.name ?? 'Admin' });
+    await updateDoc(docRef, {
+      status,
+      "metadata.updatedAt": Date.now(),
+      "metadata.updatedBy": session?.user?.name ?? 'Admin',
+      ...(status === 'approved' && { "metadata.posted": 0 })
+    });
   }
 
   const handleBanUser = async (id: string) => {
@@ -95,7 +100,7 @@ const AdminView = () => {
     {
       field: 'actions',
       type: 'actions',
-      resizable: true,
+      headerName: 'Actions',
       width: 150,
       getActions: (params) => [
         <GridActionsCellItem
@@ -113,7 +118,7 @@ const AdminView = () => {
         <GridActionsCellItem
           icon={<DeleteOutline />}
           label="Delete"
-          onClick={() => handleDeleteDoc(params.row.id!)}
+          onClick={() => handleDeleteDoc(params.row.id!, 'jobs')}
           key={`delete-${params.id}`}
         />,
         <GridActionsCellItem
@@ -129,25 +134,21 @@ const AdminView = () => {
       headerName: 'Status',
       width: 150,
       valueGetter: (params) => params.row.status.toLocaleUpperCase(),
-      resizable: true,
     },
     {
       field: 'title',
       headerName: 'Title',
       width: 150,
-      resizable: true,
     },
     {
       field: 'description',
       headerName: 'Description',
-      minWidth: 250,
+      minWidth: 450,
       flex: 1,
-      resizable: true,
     },
     {
       field: 'salary',
       headerName: 'Salary ($USD/hr)',
-      resizable: true,
       width: 150,
       valueGetter: (params) => `$${params.row.salary[0]} - $${params.row.salary[1]}`
     },
@@ -155,27 +156,23 @@ const AdminView = () => {
       field: 'tags',
       headerName: 'Tags',
       width: 250,
-      resizable: true,
       valueGetter: (params) => params.row.tags.map((x) => x.title)
     },
     {
       field: 'postedBy',
       headerName: 'Posted By',
-      resizable: true,
       width: 150,
       valueGetter: (params) => params.row.postedBy.name
     },
     {
       field: 'metadata.updatedAt',
       headerName: 'Updated At',
-      resizable: true,
       width: 250,
       valueGetter: (params) => new Date(params.row.metadata?.updatedAt ?? 0).toLocaleString()
     },
     {
       field: 'metadata.updatedBy',
       headerName: 'Updated By',
-      resizable: true,
       width: 150,
       valueGetter: (params) => params.row.metadata?.updatedBy ?? ''
     }
@@ -184,8 +181,8 @@ const AdminView = () => {
   const hireDataColumns: readonly GridColDef<ForHireData>[] = [
     {
       field: 'actions',
+      headerName: 'Actions',
       type: 'actions',
-      resizable: true,
       width: 150,
       getActions: (params) => [
         <GridActionsCellItem
@@ -203,7 +200,7 @@ const AdminView = () => {
         <GridActionsCellItem
           icon={<DeleteOutline />}
           label="Delete"
-          onClick={() => handleDeleteDoc(params.row.id!)}
+          onClick={() => handleDeleteDoc(params.row.id!, 'hire')}
           key={`delete-${params.id}`}
         />,
         <GridActionsCellItem
@@ -219,19 +216,16 @@ const AdminView = () => {
       headerName: 'Status',
       width: 150,
       valueGetter: (params) => params.row.status.toLocaleUpperCase(),
-      resizable: true,
     },
     {
       field: 'description',
       headerName: 'Description',
       minWidth: 250,
       flex: 1,
-      resizable: true,
     },
     {
       field: 'salary',
       headerName: 'Salary ($USD/hr)',
-      resizable: true,
       width: 150,
       valueGetter: (params) => `$${params.row.salary[0]} - $${params.row.salary[1]}`
     },
@@ -239,27 +233,23 @@ const AdminView = () => {
       field: 'tags',
       headerName: 'Tags',
       width: 250,
-      resizable: true,
       valueGetter: (params) => params.row.tags.map((x) => x.title)
     },
     {
       field: 'postedBy',
       headerName: 'Posted By',
-      resizable: true,
       width: 150,
       valueGetter: (params) => params.row.postedBy.name
     },
     {
       field: 'metadata.updatedAt',
       headerName: 'Updated At',
-      resizable: true,
       width: 250,
       valueGetter: (params) => new Date(params.row.metadata?.updatedAt ?? 0).toLocaleString()
     },
     {
       field: 'metadata.updatedBy',
       headerName: 'Updated By',
-      resizable: true,
       width: 150,
       valueGetter: (params) => params.row.metadata?.updatedBy ?? ''
     }

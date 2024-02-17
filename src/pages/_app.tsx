@@ -8,7 +8,6 @@ import '@fontsource/roboto/700.css';
 import { SessionProvider } from 'next-auth/react'
 import type { AppProps } from 'next/app'
 
-import firebase from 'firebase/compat/app';
 import 'firebase/firestore';
 import { FirestoreProvider } from "@/contexts/FirestoreContext";
 import { ThemeProvider } from "@mui/material";
@@ -19,7 +18,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <SessionProvider session={session}>
+      <SessionProvider
+        session={session}
+        refetchInterval={5 * 60}
+        refetchOnWindowFocus
+      >
         <FirestoreProvider>
           <Component {...pageProps} />
         </FirestoreProvider>

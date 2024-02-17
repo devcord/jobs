@@ -1,4 +1,4 @@
-import { useState, type FC, useContext } from 'react';
+import { useState, type FC, useContext, useEffect } from 'react';
 import TextField from './TextField';
 import { Alert, Button, Popover, Slider, createFilterOptions } from '@mui/material';
 import { JOB_TAGS, type JobTagType } from '@/utils/constants';
@@ -23,7 +23,9 @@ export const JobListing: FC = () => {
   const [status, setStatus] = useState<'SUCCESS' | 'ERROR' | 'LOADING' | 'IDLE'>('IDLE');
   const [message, setMessage] = useState<string | null>(null);
   const database = useContext(FirestoreContext);
-  const { data: session } = useSession();
+  const { data: session } = useSession({
+    required: true,
+  });
 
 
   const handleJobPost = async () => {
@@ -35,6 +37,8 @@ export const JobListing: FC = () => {
       return;
     }
 
+    console.log(session);
+
     const jobData: JobData = {
       title: jobTitle,
       description: jobDescription,
@@ -42,6 +46,7 @@ export const JobListing: FC = () => {
       tags: tags,
       postedBy: {
         name: session.user?.name ?? 'Unknown',
+        id: session.user.id ?? '0'
       },
       status: 'pending',
       metadata: {
