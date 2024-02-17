@@ -7,6 +7,7 @@ import JobListing from "@/components/JobListing";
 import { FirestoreContext } from "@/contexts/FirestoreContext";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import AdminView from "@/components/AdminView";
+import ForHireListing from "@/components/ForHireListing";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -117,9 +118,7 @@ export default function Home() {
             )}
 
             {whichForm === 'lookingForJob' && (
-              <div>
-                <h1>Looking for Job</h1>
-              </div>
+              <ForHireListing />
             )}
             {whichForm === 'viewAll' && (
               <AdminView />

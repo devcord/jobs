@@ -16,3 +16,19 @@ export interface JobData {
     updatedBy?: string;
   }
 }
+
+export interface ForHireData {
+  id?: string;
+  description: string;
+  salary: number[];
+  tags: JobTagType[];
+  postedBy: {
+    name: string;
+  };
+  status: string;
+  metadata?: {
+    createdAt: number;
+    updatedAt: number;
+    updatedBy?: string;
+  }
+}
