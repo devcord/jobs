@@ -60,10 +60,10 @@ const AdminView = () => {
     await deleteDoc(doc(database, `jobs/${id}`));
   }
 
-  const handleStatusChange = async (id: string, status: 'approved' | 'rejected') => {
+  const handleStatusChange = async (id: string, status: 'approved' | 'rejected', which: 'jobs' | 'hire') => {
     if (!database) return;
 
-    const docRef = doc(database, `jobs/${id}`);
+    const docRef = doc(database, `${which}/${id}`);
 
     await updateDoc(docRef, { status, "metadata.updatedAt": Date.now(), "metadata.updatedBy": session?.user?.name ?? 'Admin' });
   }
@@ -101,13 +101,13 @@ const AdminView = () => {
         <GridActionsCellItem
           icon={<CheckOutlined />}
           label="Approve"
-          onClick={() => handleStatusChange(params.row.id!, 'approved')}
+          onClick={() => handleStatusChange(params.row.id!, 'approved', 'jobs')}
           key={`approve-${params.id}`}
         />,
         <GridActionsCellItem
           icon={<CloseOutlined />}
           label="Reject"
-          onClick={() => handleStatusChange(params.row.id!, 'rejected')}
+          onClick={() => handleStatusChange(params.row.id!, 'rejected', 'jobs')}
           key={`reject-${params.id}`}
         />,
         <GridActionsCellItem
@@ -191,13 +191,13 @@ const AdminView = () => {
         <GridActionsCellItem
           icon={<CheckOutlined />}
           label="Approve"
-          onClick={() => handleStatusChange(params.row.id!, 'approved')}
+          onClick={() => handleStatusChange(params.row.id!, 'approved', 'hire')}
           key={`approve-${params.id}`}
         />,
         <GridActionsCellItem
           icon={<CloseOutlined />}
           label="Reject"
-          onClick={() => handleStatusChange(params.row.id!, 'rejected')}
+          onClick={() => handleStatusChange(params.row.id!, 'rejected', 'hire')}
           key={`reject-${params.id}`}
         />,
         <GridActionsCellItem
