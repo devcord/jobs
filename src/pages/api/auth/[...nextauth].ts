@@ -12,4 +12,5 @@ export default NextAuth({
       authorization: { params: { scope: scopes } },
     }),
   ],
+  secret: process.env.SECRET,
 })
