@@ -9,6 +9,10 @@ import { addDoc, collection } from 'firebase/firestore';
 import { LoadingButton } from '@mui/lab';
 import { type ForHireData } from '@/types/Job';
 
+import 'react-quill/dist/quill.snow.css';
+import Editor from './Editor';
+
+
 const valueLabelFormat = (value: number) => {
   return `$${value}/hr`;
 }
@@ -67,13 +71,14 @@ export const ForHireListing: FC = () => {
         {/* Job Description */}
         <label htmlFor="description" className="mt-4">
           Personal Experience Description
-          {' '}
-          <small>
-            (Markdown not supported yet)
-          </small>
         </label>
-        <TextField id="description" name="description" variant="outlined" multiline rows={4} value={jobDescription} onChange={(e) => setJobDescription(e.target.value)} />
-
+        {document ? (
+          <Editor value={jobDescription} onChange={(changes) => {
+            setJobDescription(changes.markdown);
+          }} />
+        ) : (
+          <p>Loading...</p>
+        )}
         {/* Job Salary Range (USD) */}
         <label htmlFor="salary" className="mt-4">
           Desired Salary Range (USD per hour)

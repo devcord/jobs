@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { addDoc, collection } from 'firebase/firestore';
 import { LoadingButton } from '@mui/lab';
 import { type JobData } from '@/types/Job';
+import Editor from './Editor';
 
 const valueLabelFormat = (value: number) => {
   return `$${value}/hr`;
@@ -79,12 +80,14 @@ export const JobListing: FC = () => {
         {/* Job Description */}
         <label htmlFor="description" className="mt-4">
           Job Description
-          {' '}
-          <small>
-            (Markdown not supported yet)
-          </small>
         </label>
-        <TextField id="description" name="description" variant="outlined" multiline rows={4} value={jobDescription} onChange={(e) => setJobDescription(e.target.value)} />
+        {document ? (
+          <Editor value={jobDescription} onChange={(changes) => {
+            setJobDescription(changes.markdown);
+          }} />
+        ) : (
+          <p>Loading...</p>
+        )}
 
         {/* Job Salary Range (USD) */}
         <label htmlFor="salary" className="mt-4">

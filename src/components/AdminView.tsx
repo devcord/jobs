@@ -4,8 +4,9 @@ import { FirestoreContext } from "@/contexts/FirestoreContext";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 
 import { DataGrid, GridActionsCellItem, GridSortModel, type GridColDef } from '@mui/x-data-grid';
-import { ForHireData, type JobData } from "@/types/Job";
+import { type ForHireData, type JobData } from "@/types/Job";
 import { CheckOutlined, CloseOutlined, DeleteOutline, SecurityOutlined } from "@mui/icons-material";
+import { markdownToHtml } from "@/utils/parser";
 
 
 const AdminView = () => {
@@ -143,6 +144,11 @@ const AdminView = () => {
     {
       field: 'description',
       headerName: 'Description',
+      // We want to render the markdown as html
+      // so we need to use a custom renderer
+      renderCell: (params) => {
+        return <div dangerouslySetInnerHTML={{ __html: markdownToHtml(params.row.description) }} />
+      },
       minWidth: 450,
       flex: 1,
     },
@@ -220,6 +226,11 @@ const AdminView = () => {
     {
       field: 'description',
       headerName: 'Description',
+      // We want to render the markdown as html
+      // so we need to use a custom renderer
+      renderCell: (params) => {
+        return <div dangerouslySetInnerHTML={{ __html: markdownToHtml(params.row.description) }} />
+      },
       minWidth: 250,
       flex: 1,
     },
