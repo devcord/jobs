@@ -42,6 +42,7 @@ export default function Editor(props: EditorProps) {
 
   return (
     <DynamicQuill
+      // @ts-ignore - quill-react types are not up to date
       ref={reactQuillRef}
       theme="snow"
       placeholder="Start writing..."
