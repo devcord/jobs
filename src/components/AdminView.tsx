@@ -276,6 +276,7 @@ const AdminView = () => {
         columns={jobDataColumns}
         sortModel={sortModel}
         onSortModelChange={(model) => setSortModel(model)}
+        getRowHeight={() => 'auto'}
       />
 
       <h2 style={{
@@ -286,6 +287,7 @@ const AdminView = () => {
         columns={hireDataColumns}
         sortModel={sortModel}
         onSortModelChange={(model) => setSortModel(model)}
+        getRowHeight={() => 'auto'}
       />
     </div>
   )
